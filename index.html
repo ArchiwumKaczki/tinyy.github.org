@@ -1,169 +1,284 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
-<meta charset="UTF-8">
-<title>Territorial Club</title>
-<style>
-    /* === GLOBAL === */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        color: #fff;
-        text-align: center;
-        background: #000;
-        overflow-x: hidden;
-    }
-
-    .container {
-        padding-top: 70px;
-        padding-bottom: 200px;
-        position: relative;
-        z-index: 2;
-    }
-
-    /* === SUBTELNE LINIE NEONOWE W TLE === */
-    .neon-lines {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: repeating-linear-gradient(
-            45deg,
-            rgba(0, 150, 255, 0.05) 0px,
-            rgba(0, 150, 255, 0.05) 1px,
-            transparent 1px,
-            transparent 20px
-        );
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    /* === OBRAZEK === */
-    img {
-        width: 260px;
-        height: 260px;
-        border-radius: 16px;
-        box-shadow: 0 0 30px #0077ff;
-        animation: glow 4s ease-in-out infinite;
-        transition: transform 0.3s;
-    }
-
-    img:hover {
-        transform: scale(1.05);
-    }
-
-    @keyframes glow {
-        0% { box-shadow: 0 0 25px #0077ff; }
-        50% { box-shadow: 0 0 55px #00b7ff; }
-        100% { box-shadow: 0 0 25px #0077ff; }
-    }
-
-    h1 {
-        margin-top: 25px;
-        font-size: 36px;
-        text-shadow: 0 0 15px #00aaff;
-        opacity: 0;
-        transform: translateY(30px);
-        animation: appear 1s forwards 0.3s;
-    }
-
-    button {
-        margin-top: 25px;
-        padding: 15px 45px;
-        font-size: 22px;
-        font-weight: bold;
-        border: 2px solid #00baff;
-        border-radius: 12px;
-        background: transparent;
-        color: #00d4ff;
-        cursor: pointer;
-        box-shadow: 0 0 15px #0099ff;
-        transition: 0.25s;
-        opacity: 0;
-        transform: translateY(30px);
-        animation: appear 1s forwards 0.6s;
-    }
-
-    button:hover {
-        transform: scale(1.1);
-        background: rgba(0, 150, 255, 0.18);
-        box-shadow: 0 0 25px #00ccff;
-    }
-
-    button:active {
-        transform: scale(0.95);
-        background: rgba(0, 140, 255, 0.35);
-    }
-
-    .bottom-text {
-        margin-top: 160px;
-        font-size: 32px;
-        font-weight: bold;
-        text-shadow: 0 0 12px #ffffff88;
-        opacity: 0;
-        transform: translateY(30px);
-        animation: appear 1s forwards 0.9s;
-    }
-
-    @keyframes appear {
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* === CYBER SIATKA NA DOLE === */
-    .cyber-grid {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 200px;
-        background: repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 19px,
-            rgba(0, 150, 255, 0.1) 20px
-        ), repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 19px,
-            rgba(0, 150, 255, 0.1) 20px
-        );
-        pointer-events: none;
-        z-index: 0;
-        animation: gridMove 20s linear infinite;
-    }
-
-    @keyframes gridMove {
-        0% { background-position: 0 0, 0 0; }
-        100% { background-position: 200px 200px, 200px 200px; }
-    }
-
-    /* === RESPONSYWNOŚĆ === */
-    @media (max-width: 700px) {
-        h1 { font-size: 28px; }
-        .bottom-text { font-size: 26px; }
-        button { font-size: 20px; padding: 12px 30px; }
-        img { width: 230px; height: 230px; }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinyy.js - Najszybsza Skracarka Linków</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8f9fa; }
+        .hero-section { 
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); 
+            color: white; 
+            padding: 80px 0; 
+            margin-bottom: 30px; 
+            text-align: center; 
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+        }
+        .shortener-box { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        #longUrl { 
+            flex-grow: 1; 
+            border-radius: .35rem 0 0 .35rem; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05) inset;
+        }
+        #shortenBtn { 
+            border-radius: 0 .35rem .35rem 0; 
+            transition: background-color 0.3s;
+        }
+        .result { 
+            margin-top: 15px; 
+            padding: 15px; 
+            background-color: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb; 
+            border-radius: .35rem; 
+            font-size: 1.1rem;
+            display: none; 
+            word-wrap: break-word;
+        }
+        .club-btn {
+            background-color: #dc3545;
+            transition: background-color 0.3s;
+        }
+        .club-btn:hover {
+            background-color: #c82333;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin: 20px 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="neon-lines"></div>
-<div class="cyber-grid"></div>
-
-<div class="container">
-
-    <img src="https://static.wikia.nocookie.net/territorial/images/c/cb/Territorial.io.jpg/revision/latest/smart/width/250/height/250?cb=20210618071225" alt="Territorial Image">
-
-    <h1>Join our Territorial Club</h1>
-
-    <button onclick="alert('This page is currently under development!')">Join</button>
-
-    <div class="bottom-text">
-        Join the Tinyy.js club
+    <div class="hero-section">
+        <h1><i class="fas fa-link"></i> Tinyy.js Link Shortener</h1>
+        <p class="lead">Zmieniaj długie URL w **Tinyy.js.org/(krótki kod)**. Szybko. Bezpiecznie. Za darmo.</p>
     </div>
-</div>
 
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="shortener-box">
+                    <input type="url" id="longUrl" class="form-control form-control-lg" placeholder="Wklej tutaj długi adres URL..." required>
+                    <button id="shortenBtn" class="btn btn-primary btn-lg"><i class="fas fa-scissors"></i> Skróć!</button>
+                </div>
+                <div id="shortUrlResult" class="result"></div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <button class="btn btn-secondary me-3" onclick="toggleInstructions()"><i class="fas fa-info-circle"></i> Jak to działa?</button>
+                <button id="openClubModal" class="btn club-btn"><i class="fas fa-gamepad"></i> Join our Territorial Club</button>
+            </div>
+        </div>
+
+        <div id="instructionsSection" style="display: none; padding-top: 20px; border-top: 1px solid #dee2e6;">
+            <h2 class="text-center mb-4 text-dark"><i class="fas fa-book-open"></i> Instrukcje / How it works</h2>
+            
+            <div class="text-center mb-4">
+                <label for="langSelect" class="form-label me-2">Wybierz język / Select language:</label>
+                <select id="langSelect" onchange="switchLanguage(this.value)" class="form-select w-auto d-inline-block">
+                    <option value="pl">Polski (PL)</option>
+                    <option value="en">English (EN)</option>
+                </select>
+            </div>
+
+            <div id="instructionsPL" class="lang-content">
+                <h4 class="mt-4 text-primary">Przewodnik Krok po Kroku (PL)</h4>
+                <ol>
+                    <li>
+                        <strong>Wklejanie Linku:</strong> Skopiuj długi link i wklej go w pole nad przyciskiem "Skróć!".
+                    </li>
+                    <li>
+                        <strong>Skracanie:</strong> Kliknij przycisk **"Skróć!"**. System wygeneruje unikalny kod, składający się z **maksymalnie 6 znaków**.
+                    </li>
+                    <li>
+                        <strong>Gotowe:</strong> Twój krótki link w formacie <code>Tinyy.js.org/xxxxxx</code> pojawi się w zielonym polu z opcją kopiowania.
+                    </li>
+                </ol>
+            </div>
+
+            <div id="instructionsEN" class="lang-content" style="display: none;">
+                <h4 class="mt-4 text-primary">Step-by-Step Guide (EN)</h4>
+                <ol>
+                    <li>
+                        <strong>Pasting the Link:</strong> Copy your long URL and paste it into the input field above the "Shorten!" button.
+                    </li>
+                    <li>
+                        <strong>Shortening:</strong> Click the **"Shorten!"** button. The system will generate a unique code of **maximum 6 characters**.
+                    </li>
+                    <li>
+                        <strong>Done:</strong> Your short link in the format <code>Tinyy.js.org/xxxxxx</code> will appear in the green box with a copy option.
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clubModal" tabindex="-1" aria-labelledby="clubModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="clubModalLabel"><i class="fas fa-shield-alt"></i> Tinyy.js - Territorial Club</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h3 class="text-danger">Tinyy.js</h3>
+                    <p class="lead">Witaj w oficjalnym klubie entuzjastów Territorial!</p>
+
+                    <button onclick="simulate404()" class="btn btn-success btn-lg my-3"><i class="fas fa-users"></i> Join</button>
+
+                    <h4 class="mt-4 border-top pt-3">Jak grać w Territorial.io:</h4>
+                    
+                    <div class="text-start mb-4">
+                        <div id="territorialPL">
+                            <h5>🇵🇱 Podstawy Territorial.io</h5>
+                            <ul>
+                                <li><strong>Cel gry:</strong> Podbicie jak największej części mapy i eliminacja przeciwników.</li>
+                                <li><strong>Ekonomia (E):</strong> Inwestowanie w "Ekonomię" zwiększa Twój przychód. Im większe terytorium, tym szybszy wzrost.</li>
+                                <li><strong>Atak (A):</strong> Użyj "Ataku", aby przejmować sąsiednie terytoria. Jest to klucz do ekspansji, ale kosztuje więcej niż ekonomia.</li>
+                                <li><strong>Zasada:</strong> Znajdź równowagę między budowaniem bogactwa (Ekonomia) a agresywną ekspansją (Atak). Pamiętaj o zawieraniu sojuszy!</li>
+                            </ul>
+                        </div>
+                        <div id="territorialEN" style="display:none;">
+                            <h5>🇬🇧 Territorial.io Basics</h5>
+                            <ul>
+                                <li><strong>Goal:</strong> Conquer as much of the map as possible and eliminate opponents.</li>
+                                <li><strong>Economy (E):</strong> Investing in "Economy" increases your income. Larger territories yield faster growth.</li>
+                                <li><strong>Attack (A):</strong> Use "Attack" to capture adjacent territories. It is vital for expansion but costs more than Economy.</li>
+                                <li><strong>Rule:</strong> Find a balance between building wealth (Economy) and aggressive expansion (Attack). Remember to form alliances!</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4 border-top pt-3">Tutorial Wideo (English):</h4>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Cy2g_tsGJyM?" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const instructionsSection = document.getElementById('instructionsSection');
+        const clubModalElement = document.getElementById('clubModal');
+        const clubModal = new bootstrap.Modal(clubModalElement); 
+        const instructionsPL = document.getElementById('instructionsPL');
+        const instructionsEN = document.getElementById('instructionsEN');
+        
+        const territorialPL = document.getElementById('territorialPL');
+        const territorialEN = document.getElementById('territorialEN');
+
+        // Funkcja generująca losowy kod, OGRANICZONY DO MAX 6 ZNAKÓW
+        function generateRandomCode(length = 6) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        // Funkcja przełączająca widoczność instrukcji
+        function toggleInstructions() {
+            instructionsSection.style.display = instructionsSection.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Funkcja przełączająca język instrukcji i dokumentacji klubu
+        function switchLanguage(lang) {
+            instructionsPL.style.display = lang === 'pl' ? 'block' : 'none';
+            instructionsEN.style.display = lang === 'en' ? 'block' : 'none';
+            
+            // Przełączanie języka dokumentacji klubu
+            territorialPL.style.display = lang === 'pl' ? 'block' : 'none';
+            territorialEN.style.display = lang === 'en' ? 'block' : 'none';
+        }
+
+        // Symulacja błędu 404 dla przycisku Join
+        function simulate404() {
+            alert('🚨 Błąd 404: Strona dołączenia do klubu nie została znaleziona. Próba połączenia nie powiodła się. Spróbuj dołączyć później!');
+        }
+
+        // Funkcja kopiowania linku (umieszczona w głównym zakresie script)
+        function copyLink() {
+            const copyText = document.getElementById("shortenedLink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value)
+                .then(() => {
+                    alert("Skrócony link skopiowany do schowka: " + copyText.value);
+                })
+                .catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    alert("Nie udało się skopiować linku automatycznie. Proszę skopiować ręcznie.");
+                });
+        }
+
+        // Logika skracania linku (symulacja front-end)
+        document.getElementById('shortenBtn').onclick = function() {
+            const longUrl = document.getElementById('longUrl').value.trim();
+            const resultBox = document.getElementById('shortUrlResult');
+
+            if (longUrl && (longUrl.startsWith('http://') || longUrl.startsWith('https://'))) {
+                const shortCode = generateRandomCode(); 
+                resultBox.innerHTML = `
+                    <p class="mb-0">Skrócono pomyślnie! Twój link:</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="Tinyy.js.org/${shortCode}" id="shortenedLink" readonly>
+                        <button class="btn btn-success" onclick="copyLink()"><i class="fas fa-copy"></i> Kopiuj</button>
+                    </div>
+                `;
+                resultBox.style.display = 'block';
+            } else if (!longUrl) {
+                alert('Proszę wprowadzić pełny link do skrócenia.');
+                resultBox.style.display = 'none';
+            } else {
+                 alert('Wprowadzony tekst nie jest poprawnym adresem URL. Użyj formatu z "http://" lub "https://".');
+                 resultBox.style.display = 'none';
+            }
+        };
+
+        // Otwieranie Modala
+        document.getElementById('openClubModal').onclick = function() {
+            clubModal.show();
+        };
+
+        // Inicjalizacja: Upewnienie się, że język jest zgodny z domyślnym wyborem
+        switchLanguage(document.getElementById('langSelect').value);
+    </script>
 </body>
-</html>
+                    </html>
